@@ -22,3 +22,12 @@ body {
 	background-color: black;
 	border: solid 3px lime;
 }
+
+.hidden {
+	display: none;
+}
+
+@font-face {
+	font-family: Serpens;
+	src: url(../assets/fonts/serpens-font/SerpensRegular-7MGE.ttf);
+}
