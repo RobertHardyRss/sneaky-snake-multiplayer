@@ -12,12 +12,6 @@ import {
 import { Player } from "./player.js";
 import { GameOver, SneakDisplay, StartScene } from "./scenes.js";
 
-// TODO: For Game
-//		We need game over with play again
-//			2 player end conditions
-//			Final scoring is based on body length
-//		Player sneak attempt counts on screen
-
 export let game = {
 	/** @type {Player[]} */
 	players: [],
@@ -30,7 +24,7 @@ export let game = {
 	isGameOver: false,
 	winningPlayer: 0,
 	currentTime: 0,
-    audioPlayer: new AudioPlayer(),
+	audioPlayer: new AudioPlayer(),
 
 	initialize: function () {
 		document.addEventListener("keydown", (e) => {
@@ -57,6 +51,7 @@ export let game = {
 
 		this.startScene.show();
 	},
+
 	start: function () {
 		this.startScene.hide();
 		this.audioPlayer.init();
@@ -107,11 +102,12 @@ export let game = {
 
 		requestAnimationFrame(gameLoop);
 	},
+
 	gameOver: function () {
 		this.gameOverScene.players = this.players;
 		this.gameOverScene.show();
 	},
-	reset: function () {},
+
 	getGameObjectCoordinates: function () {
 		// builds an array of game object coordinates based on the
 		// current food array and the number of players

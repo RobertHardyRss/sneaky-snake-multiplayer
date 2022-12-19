@@ -1,11 +1,6 @@
 //@ts-check
-
 import { GRID_SIZE, canvas } from "./constants.js";
 import { Coordinates } from "./coordinates.js";
-
-// TODO: Food
-// How many food spawn?
-//  	Make it configurable?
 
 export class Food extends Coordinates {
 	/**
@@ -19,6 +14,11 @@ export class Food extends Coordinates {
 		this.growBy = 1;
 		this.sneakAttempts = 0;
 		this.isEaten = true;
+
+		this.shadowBlur = 0;
+		this.shadowBlurMax = GRID_SIZE;
+		this.shadowColor = "DeepPink";
+		this.shadowGrowing = true;
 	}
 
 	/**
@@ -74,6 +74,7 @@ export class Food extends Coordinates {
 				this.color = "gold";
 				this.growBy = 3;
 				this.sneakAttempts = 2;
+				this.shadowColor = "yellow";
 				break;
 			case 2:
 			case 3:
@@ -81,10 +82,12 @@ export class Food extends Coordinates {
 				this.color = "blue";
 				this.growBy = 2;
 				this.sneakAttempts = 1;
+				this.shadowColor = "cyan";
 				break;
 			default:
 				this.color = "red";
 				this.growBy = 1;
+				this.shadowColor = "DeepPink";
 				break;
 		}
 	}
@@ -93,11 +96,23 @@ export class Food extends Coordinates {
 	 * @param {number} elapsedTime
 	 */
 	update(elapsedTime) {
-		// TODO: give food a glowing effect that radiates
+		if (
+			(this.shadowGrowing && this.shadowBlur >= this.shadowBlurMax) ||
+			(!this.shadowGrowing && this.shadowBlur <= 0)
+		) {
+			this.shadowGrowing = !this.shadowGrowing;
+		}
+
+		this.shadowBlur += this.shadowGrowing ? 1 : -1;
 	}
 
 	draw() {
 		if (this.isEaten) return;
+
+		this.ctx.save();
+
+		this.ctx.shadowColor = this.shadowColor;
+		this.ctx.shadowBlur = this.shadowBlur;
 
 		this.ctx.beginPath();
 		this.ctx.fillStyle = this.color;
@@ -109,6 +124,8 @@ export class Food extends Coordinates {
 			Math.PI * 2
 		);
 		this.ctx.fill();
+
 		this.ctx.closePath();
+		this.ctx.restore();
 	}
 }
